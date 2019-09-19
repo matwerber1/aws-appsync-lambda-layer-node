@@ -16,13 +16,15 @@ Two reasons:
 
 2. If you modify data directly in a backend, the change will not be picked up by any subscriptions that clients have with AppSync. 
 
-## Usage
+## Deployment
 
 1. Clone this repo
 
 2. Run `./deploy.sh` to create the layer **and** a demo Lambda function; if you don't want the demo function, just remove it from `template.yaml`.
 
-3. Import the helper, initialize the client, and invoke your endpoint: 
+## Example
+
+Import the helper layer to an AWS Lambda function, initialize the client, and invoke your endpoint: 
 
 ```js
 const AppSyncHelper = require('appsync-helper');
@@ -57,4 +59,64 @@ exports.handler = async (event) => {
   }  
   return ('Done!');  
 };
+```
+
+# Usage
+
+## Initialize the client
+
+At the moment, the helper only supports AWS_IAM authentication. It wouldn't take much to add support for API_KEY or other methods.The access keys and session token environment vars are automatically provided to your function by AWS Lambda: 
+
+```js
+const AppSyncHelper = require('appsync-helper');
+
+var appSyncClient = new AppSyncHelper({
+  url: 'https://YOUR_API_ENDPOINT.appsync-api.YOUR_API_REGION.amazonaws.com/graphql',         
+  region: process.env.AWS_REGION,      
+  auth_type: 'AWS_IAM',   
+  accessKey:  process.env.AWS_ACCESS_KEY_ID,    
+  secretKey: process.env.AWS_SECRET_ACCESS_KEY,   
+  sessionToken: process.env.AWS_SESSION_TOKEN
+});
+```
+
+## Query
+
+```js
+var query = `
+  query GetItem {
+    getItem {
+      id,
+      attribute1,
+      ...
+    }
+  }
+`;
+
+var response = await appSyncClient.query(
+  query,      // string, required
+  fetch_policy  // string, optional (default = 'network-only')
+);
+```
+
+## Mutation
+
+```js
+var mutation = `
+  mutation AddPost($name: String!) {
+    addPost(name:$name) {
+      id
+      name
+  }
+}
+`; 
+
+var variables = {
+  name: 'John Doe'
+};
+
+var response = await appSyncClient.mutate(
+  mutation,      // string, required
+  variables      // optional, object of key-value pairs for variables in your mutation (if any)
+);
 ```
