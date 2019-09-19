@@ -20,7 +20,7 @@ Two reasons:
 
 1. Clone this repo
 
-2. Run `./deploy.sh` to create the layer and a demo Lambda function
+2. Run `./deploy.sh` to create the layer **and** a demo Lambda function; if you don't want the demo function, just remove it from `template.yaml`.
 
 3. Import the helper, initialize the client, and invoke your endpoint: 
 
