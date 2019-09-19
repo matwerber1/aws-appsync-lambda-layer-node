@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Demo AppSync Lambda Layer
+
+Resources:
+  # This function may be used to test/demo the Lambda Layer for AppSync
+  AppSyncTestFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: lambda/appsync-test-function/
+      Handler: index.handler
+      Runtime: nodejs10.x
+      Timeout: 10
+      Layers:
+        - !Ref AppSyncLayer
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action: 
+              - appsync:*
+              - dynamodb:*
+            Resource: '*'
+
+  AppSyncLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: appsync-node-layer
+      Description: Contains a layer to support AppSync in Node
+      ContentUri: lambda-layers/
+      CompatibleRuntimes:
+        - nodejs10.x
+      LicenseInfo: 'ISC'
+      RetentionPolicy: Retain

@@ -1,0 +1,4 @@
+.aws-sam
+packaged.yaml
+lambda-layers/nodejs/node_modules/*
+!lambda-layers/nodejs/node_modules/appsync-helper
