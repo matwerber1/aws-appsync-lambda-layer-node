@@ -4,6 +4,8 @@ This Lambda Layer wraps dependencies and provides a few helper functions for int
 
 At this time, the helper only provides basic query and mutate capability using AWS_IAM authentication and was adapted based on guidance from https://geromekevin.com/how-to-use-aws-appsync-in-lambda-functions/. 
 
+This layer is barebones at the moment - pull requests always welcome :)
+
 ## Why? 
 
 So, why bother going through AppSync rather than hitting our backend (e.g. DynamoDB, RDS, etc.) directly from our Lambda?
