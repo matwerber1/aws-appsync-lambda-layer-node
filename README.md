@@ -14,7 +14,7 @@ Two reasons:
 
 1. Using AppSync in our Lambda allows us to interact using the same model that we (presumably) use in our front-end. No need to maintain two different methods. 
 
-2. If you modify data directly in a backend, the change will not be picked up by any subscriptions that clients have with AppSync. 
+2. If you modify data directly in your backend (e.g. a DynamoDB API call or a SQL command in RDS), the change will **not** be detected by any AppSync subscriptions your clients have made, and they will miss the change. However, if our Lambda modifies data in our backend using an AppSync mutation, the change **will** be detected and our subscriptions will work as expected. 
 
 ## Deployment
 
